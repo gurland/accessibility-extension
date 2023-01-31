@@ -25,7 +25,7 @@ def get_posts():
     detail = request.args.get("offset", 0)
 
     return [post.to_dict() for post in BlogPost.select(
-        BlogPost.sign, BlogPost.date, BlogPost.brief
+        BlogPost.id, BlogPost.sign, BlogPost.date, BlogPost.brief
     ).offset(offset).limit(limit)]
 
 

@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  nginx:
+    build: ./nginx_service/
+    ports:
+      - "80:80"
+    depends_on:
+#      - frontend
+      - gateaway_api
+      - summarization_service
+    volumes:
+      - ./block_configs_local/:/etc/nginx/conf.d/
+
+#  frontend:
+#    build: ./frontend_service
+
+  redis:
+    image: redis
+
+  gateaway_api:
+    build: ./gateway_api/
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+  summarization_service:
+    build: ./summarization_service
+    env_file:
+      - .env
+    depends_on:
+      - redis

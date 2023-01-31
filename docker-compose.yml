@@ -6,10 +6,7 @@ services:
       - "80:80"
     depends_on:
 #      - frontend
-      - gateaway_api
-      - summarization_service
-    volumes:
-      - ./block_configs_local/:/etc/nginx/conf.d/
+      - api
 
 #  frontend:
 #    build: ./frontend_service
@@ -17,12 +14,14 @@ services:
   redis:
     image: redis
 
-  gateaway_api:
+  api:
     build: ./gateway_api/
     env_file:
       - .env
     depends_on:
       - redis
+    volumes:
+    - ./gateway_api/src/:/app
 
   summarization_service:
     build: ./summarization_service
@@ -30,3 +29,5 @@ services:
       - .env
     depends_on:
       - redis
+    volumes:
+    - ./hugging_face_hub_cache:/root/.cache/huggingface/hub

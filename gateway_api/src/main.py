@@ -12,12 +12,12 @@ app = Flask(__name__)
 r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 
-@app.route("/api")
+@app.route("/api/")
 def heartbeat():
     return {"message": "Api is running"}
 
 
-@app.route("/api/summaries", methods=["POST"])
+@app.route("/api/summaries/", methods=["POST"])
 def process_html_to_summary():
     payload = request.get_json()
     trace_id = str(uuid.uuid4())
@@ -34,13 +34,13 @@ def process_html_to_summary():
         retries += 1
         summary = r.get(trace_id)
         if summary is not None:
-            return {"summary": summary}
+            return {"summary": summary.decode()}
 
     return {"message": "no summary generated, sorry"}
 
 
-@app.route("/api/summaries/<string:summary_id>", methods=["POST"])
-def process_html_to_summary(summary_id):
+@app.route("/api/summaries/<string:summary_id>/", methods=["GET"])
+def get_summary_by_id(summary_id):
     summary = r.get(summary_id)
     if summary is not None:
         return {"summary": summary}

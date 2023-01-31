@@ -1,8 +1,10 @@
 FROM python:3
 
-COPY . app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY ./src app
 WORKDIR app/
 
-RUN pip install -r requirements.txt
 
 CMD ["uwsgi", "--ini", "uwsgi.ini"]

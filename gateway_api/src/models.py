@@ -21,6 +21,7 @@ class BlogPost(Model):
 
     def to_dict(self):
         return {
+            "id": self.id,
             "age": self.age,
             "gender": self.gender,
             "topic": self.topic,

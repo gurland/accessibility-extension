@@ -22,8 +22,19 @@ def heartbeat():
 def get_posts():
     limit = request.args.get("limit", 20)
     offset = request.args.get("offset", 0)
+    detail = request.args.get("offset", 0)
 
-    return [post.to_dict() for post in BlogPost.select().offset(offset).limit(limit)]
+    return [post.to_dict() for post in BlogPost.select(
+        BlogPost.sign, BlogPost.date, BlogPost.brief
+    ).offset(offset).limit(limit)]
+
+
+@app.route("/api/posts/<int:post_id>")
+def get_post_by_id(post_id):
+    try:
+        return BlogPost.get(id=post_id).to_dict()
+    except Exception as e:
+        return {"message": f"error: {e}"}, 404
 
 
 @app.route("/api/summaries/", methods=["POST"])

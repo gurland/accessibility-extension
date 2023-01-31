@@ -1,5 +1,8 @@
-import csv
+import os
+
 from peewee import *
+import pandas
+
 
 db = SqliteDatabase('blogpost.db')
 
@@ -15,9 +18,6 @@ class BlogPost(Model):
     date = CharField()
     text = TextField()
     brief = TextField()
-
-
-import pandas
 
 
 def upload_csv(file_path):
@@ -42,8 +42,11 @@ def upload_csv(file_path):
             posts.clear()
 
 
-if __name__ == '__main__':
-    db.connect()
-    db.create_tables([BlogPost])
-    upload_csv('blogtext.csv')
-    db.close()
+def seed_blog_posts():
+    if os.path.exists('blogtext.csv'):
+        if BlogPost.select().count() < 1:
+            upload_csv('blogtext.csv')
+
+
+db.create_tables([BlogPost])
+seed_blog_posts()

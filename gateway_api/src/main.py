@@ -6,6 +6,7 @@ from flask import Flask, request
 import redis
 
 from settings import REDIS_HOST, REDIS_PORT, REDIS_DB
+from models import BlogPost
 
 
 app = Flask(__name__)
@@ -15,6 +16,14 @@ r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 @app.route("/api/")
 def heartbeat():
     return {"message": "Api is running"}
+
+
+@app.route("/api/posts")
+def get_posts():
+    limit = request.args.get("limit", 20)
+    offset = request.args.get("offset", 0)
+
+    return [post.to_dict() for post in BlogPost.select().offset(offset).limit(limit)]
 
 
 @app.route("/api/summaries/", methods=["POST"])

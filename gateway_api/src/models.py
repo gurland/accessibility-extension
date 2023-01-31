@@ -19,6 +19,17 @@ class BlogPost(Model):
     text = TextField()
     brief = TextField()
 
+    def to_dict(self):
+        return {
+            "age": self.age,
+            "gender": self.gender,
+            "topic": self.topic,
+            "sign": self.sign,
+            "date": self.date,
+            "text": self.text,
+            "brief": self.brief,
+        }
+
 
 def upload_csv(file_path):
     df = pandas.read_csv(file_path)

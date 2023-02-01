@@ -56,7 +56,7 @@ def process_html_to_summary():
         retries += 1
         summary = r.get(trace_id)
         if summary is not None:
-            return Summary.create(id=trace_id, html=html, summary=str(summary), url=url).to_dict()
+            return Summary.create(id=trace_id, html=html, summary=summary.decode(), url=url).to_dict()
 
     return {"message": "no summary generated, sorry"}
 

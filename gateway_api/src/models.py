@@ -21,8 +21,9 @@ class Summary(Base):
     def to_dict(self):
         return {
             "id": self.id,
-            "html": self.html,
-            "summary": self.summary
+            # "html": self.html,
+            "summary": self.summary,
+            "url": self.url
         }
 
 

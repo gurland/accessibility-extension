@@ -6,7 +6,7 @@ from flask import Flask, request
 import redis
 
 from settings import REDIS_HOST, REDIS_PORT, REDIS_DB
-from models import BlogPost
+from models import BlogPost, Summary
 
 
 app = Flask(__name__)
@@ -22,7 +22,6 @@ def heartbeat():
 def get_posts():
     limit = request.args.get("limit", 20)
     offset = request.args.get("offset", 0)
-    detail = request.args.get("offset", 0)
 
     return [post.to_dict() for post in BlogPost.select(
         BlogPost.id, BlogPost.sign, BlogPost.date, BlogPost.brief
@@ -41,10 +40,13 @@ def get_post_by_id(post_id):
 def process_html_to_summary():
     payload = request.get_json()
     trace_id = str(uuid.uuid4())
+    html = payload.get("html")
+    url = payload.get("url")
+
     r.lpush("summarization_tasks", json.dumps(
         {
             "id": trace_id,
-            "html": payload.get("html")
+            "html": html
         }
     ))
 
@@ -54,9 +56,14 @@ def process_html_to_summary():
         retries += 1
         summary = r.get(trace_id)
         if summary is not None:
-            return {"summary": summary.decode()}
+            return Summary.create(id=trace_id, html=html, summary=summary, url=url).to_dict()
 
     return {"message": "no summary generated, sorry"}
+
+
+@app.route("/api/summaries/", methods=["GET"])
+def get_all_summaries():
+    return [s.to_dict() for s in Summary.select()]
 
 
 @app.route("/api/summaries/<string:summary_id>/", methods=["GET"])
@@ -64,8 +71,11 @@ def get_summary_by_id(summary_id):
     summary = r.get(summary_id)
     if summary is not None:
         return {"summary": summary}
-
-    return {"message": "no summary generated, sorry"}
+    else:
+        try:
+            return Summary.get(id=summary_id).to_dict()
+        except Summary.DoesNotExist:
+            return {"message": "no summary generated, sorry"}
 
 
 if __name__ == "__main__":

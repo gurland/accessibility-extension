@@ -7,10 +7,26 @@ import pandas
 db = SqliteDatabase('blogpost.db')
 
 
-class BlogPost(Model):
+class Base(Model):
     class Meta:
         database = db
 
+
+class Summary(Base):
+    id = UUIDField(primary_key=True)
+    html = TextField()
+    summary = TextField(null=True)
+    url = TextField(null=True)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "html": self.html,
+            "summary": self.summary
+        }
+
+
+class BlogPost(Base):
     age = IntegerField()
     gender = CharField()
     topic = TextField()
@@ -60,5 +76,5 @@ def seed_blog_posts():
             upload_csv('blogtext.csv')
 
 
-db.create_tables([BlogPost])
+db.create_tables([BlogPost, Summary])
 seed_blog_posts()

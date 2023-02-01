@@ -1,0 +1,17 @@
+{
+  "name": "Accessibility Extension",
+  "description": "Add summary to your favourites!",
+  "version": "1.1",
+  "manifest_version": 2,
+  "icons": {
+    "48": "icons/48.png",
+    "96": "icons/96.png"
+  },
+  "permissions": [
+    "*://*/"
+  ],
+  "browser_action": {
+    "default_title": "Click to send a message",
+    "default_popup": "popup/popup.html"
+  }
+}

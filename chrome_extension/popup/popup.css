@@ -1,0 +1,10 @@
+body {
+    background-color: deepskyblue;
+}
+
+button {
+    font-size: large;
+    padding: 10px;
+    color: rgb(51, 238, 255);
+    background-color: #fffd00;
+}

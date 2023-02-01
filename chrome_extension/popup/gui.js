@@ -7,7 +7,7 @@ summarizeButton.addEventListener("click", async () => {
     tabs.forEach(function (tab) {
       chrome.tabs.executeScript(tab.id, {file: 'inject.js'}, async function (pageInfo) {
         console.log(pageInfo);
-        const response = await fetch(API_BASE + "/summaries", {
+        const response = await fetch(API_BASE + "/summaries/", {
           method: 'POST',
           mode: 'cors',
           cache: 'no-cache',

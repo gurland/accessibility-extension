@@ -2,7 +2,7 @@ const API_BASE = "http://23.88.117.114/api"
 
 const summarizeButton = document.getElementById("summarize");
 summarizeButton.addEventListener("click", async () => {
-  console.log("ababa")
+  console.log("ababa");
   chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
     tabs.forEach(function (tab) {
       chrome.tabs.executeScript(tab.id, {file: 'inject.js'}, async function (pageInfo) {

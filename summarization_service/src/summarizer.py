@@ -32,6 +32,8 @@ def get_summary(text: str) -> Union[str, None]:
 
 def get_summary_from_html(html):
     soup = BeautifulSoup(html, "html.parser")
-    summary = get_summary(soup.get_text())
+    text = soup.get_text()
+    logger.info(text)
+    summary = get_summary(text)
     clean_summary = BeautifulSoup(summary, "html.parser").get_text()
     return clean_summary

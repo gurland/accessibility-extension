@@ -15,7 +15,7 @@
 
   alert("started");
 
-  fetch(API_BASE + "/summaries/", {
+  fetch(API_BASE + "/summaries", {
     method: 'POST',
     mode: 'no-cors',
     cache: 'no-cache',

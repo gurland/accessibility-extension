@@ -9,8 +9,6 @@ async function sendToSummarize() {
   const html = escapeHtml(document.documentElement.outerHTML);
   const url = window.location.href;
 
-
-  // Default options are marked with *
   const response = await fetch(API_BASE+"/summaries", {
     method: 'POST',
     mode: 'cors',

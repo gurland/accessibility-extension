@@ -1,16 +1,13 @@
 import uuid
-import json
-from time import sleep
 
 from flask import Flask, request
-import redis
 
-from settings import REDIS_HOST, REDIS_PORT, REDIS_DB
+from settings import logger
 from models import BlogPost, Summary
+from utils import process_content_and_get_summary
 
 
 app = Flask(__name__)
-r = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 
 @app.route("/api/")
@@ -43,20 +40,14 @@ def process_html_to_summary():
     html = payload.get("html")
     url = payload.get("url")
 
-    r.lpush("summarization_tasks", json.dumps(
-        {
-            "id": trace_id,
-            "html": html
-        }
-    ))
+    try:
+        Summary.get(url=url).to_dict()
+    except Summary.DoesNotExist:
+        logger.info(f"URL: {url} not found. Sending Task with ID: {trace_id} to summarize")
 
-    retries = 0
-    while retries < 20:
-        sleep(1)
-        retries += 1
-        summary = r.get(trace_id)
+        summary = process_content_and_get_summary(trace_id, html)
         if summary is not None:
-            return Summary.create(id=trace_id, html=html, summary=summary.decode(), url=url).to_dict()
+            return Summary.create(id=trace_id, html=html, summary=summary, url=url).to_dict()
 
     return {"message": "no summary generated, sorry"}
 

@@ -66,16 +66,20 @@ def get_all_summaries():
     return [s.to_dict() for s in Summary.select()]
 
 
-@app.route("/api/summaries/<string:summary_id>/", methods=["GET"])
+@app.route("/api/summaries/<string:summary_id>/", methods=["GET", "DELETE"])
 def get_summary_by_id(summary_id):
-    summary = r.get(summary_id)
-    if summary is not None:
-        return {"summary": summary}
-    else:
-        try:
-            return Summary.get(id=summary_id).to_dict()
-        except Summary.DoesNotExist:
-            return {"message": "no summary generated, sorry"}
+    try:
+        summary = Summary.get(id=summary_id)
+
+        if request.method == "GET":
+            return summary.to_dict()
+        elif request.method == "DELETE":
+            summary.delete_instance()
+            return {"message": "deleted successfully!"}
+    except Summary.DoesNotExist:
+        return {"message": "no summary generated, sorry"}, 404
+
+    return {"message": "no summary generated, sorry"}, 400
 
 
 if __name__ == "__main__":

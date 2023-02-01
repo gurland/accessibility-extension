@@ -21,5 +21,5 @@ def main():
 
 
 if __name__ == "__main__":
-    logger.info(f"starting summarization service...")
+    logger.info(f"Started summarization service.")
     main()

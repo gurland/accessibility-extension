@@ -41,8 +41,11 @@ def process_html_to_summary():
     url = payload.get("url")
 
     try:
-        return Summary.get(url=url).to_dict()
-    except Summary.DoesNotExist:
+        if url:
+            return Summary.get(url=url).to_dict()
+        else:
+            raise
+    except Exception:
         logger.info(f"URL: {url} not found. Sending Task with ID: {trace_id} to summarize")
 
         summary = process_content_and_get_summary(trace_id, html)

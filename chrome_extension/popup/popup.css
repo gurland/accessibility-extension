@@ -1,10 +1,12 @@
 body {
-    background-color: deepskyblue;
+    background-color: #b1d4e0;
+    padding: 30px;
 }
 
 button {
     font-size: large;
+    border-radius: 5px;
     padding: 10px;
-    color: rgb(51, 238, 255);
-    background-color: #fffd00;
+    color: white;
+    background-color: #2e8bc0;
 }

@@ -57,7 +57,7 @@ def process_html_to_summary():
 
 @app.route("/api/summaries/", methods=["GET"])
 def get_all_summaries():
-    return [s.to_dict() for s in Summary.select()]
+    return [s.to_dict() for s in Summary.select().where(Summary.name.is_null(False) & (Summary.name != ""))]
 
 
 @app.route("/api/summaries/<string:summary_id>/", methods=["GET", "DELETE"])

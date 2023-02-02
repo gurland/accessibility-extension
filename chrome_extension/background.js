@@ -12,7 +12,8 @@ chrome.runtime.onMessage.addListener(async (message, sender, reply) => {
       )
     });
     if (response.status === 200) {
-      alert(JSON.stringify(await response.json()));
+      let respJson = await response.json();
+      alert(respJson["summary"]);
     }
   }
 });

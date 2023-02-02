@@ -13,7 +13,7 @@ summarizeButton.addEventListener("click", () => {
             pageInfo[0]
           )
         }).then((response) => {
-          alert(JSON.stringify(response.json()));
+          console.log(JSON.stringify(response.json()));
         });
       });
   });

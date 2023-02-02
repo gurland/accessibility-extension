@@ -1,15 +1,25 @@
-const API_BASE = "https://d32bdp38hd.execute-api.eu-central-1.amazonaws.com/api"
+const API_BASE = "http://23.88.117.114/api"
 
 const summarizeButton = document.getElementById("summarize");
-summarizeButton.addEventListener("click", async (e) => {
+summarizeButton.addEventListener("click", () => {
+  fetch('http://httpbin.org/ip').then(r => r.text()).then(result => {
+    alert(result);
+  });
+
+  console.log("ababa");
   chrome.tabs.query({active: true, currentWindow: true}, function (tabs) {
-    tabs.forEach(function (tab) {
-      chrome.tabs.executeScript(tab.id, {file: 'inject.js'}, async function (pageInfo) {
-        console.log(pageInfo);
-
-
-        return resp;
+    chrome.tabs.executeScript(tabs[0].id, {file: 'inject.js'}, function (pageInfo) {
+        fetch(API_BASE + "/summaries/", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            pageInfo[0]
+          )
+        }).then((response) => {
+          alert(JSON.stringify(response.json()));
+        });
       });
-    });
   });
 });

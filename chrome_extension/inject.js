@@ -1,6 +1,7 @@
-;(function() {
-  const API_BASE = "https://d32bdp38hd.execute-api.eu-central-1.amazonaws.com/api"
+// Script which is being injecting into target page
+// In order to obtain needed document data and send to background.js
 
+;(function() {
   const escapeHtml = (unsafeHTML) => {
     return unsafeHTML.replaceAll('&', '&amp;')
       .replaceAll('\n', ' ')
@@ -13,6 +14,5 @@
     }
   };
 
-  alert("started");
   chrome.runtime.sendMessage({type: "summarize", "pageInfo": getPageInfo()});
 })();

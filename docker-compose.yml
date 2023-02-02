@@ -5,11 +5,11 @@ services:
     ports:
       - "80:80"
     depends_on:
-#      - frontend
+      - frontend
       - api
 
-#  frontend:
-#    build: ./frontend_service
+  frontend:
+    build: ./frontend_service
 
   redis:
     image: redis
